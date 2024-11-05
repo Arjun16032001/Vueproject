@@ -91,7 +91,14 @@
   async function fetchProducts() {
     try {
       const response = await axios.get('https://dummyapi.online/api/products/');
-      products.value = response.data.map(product => ({ ...product, count: 0 })); 
+      // products.value = response.data.map(product => ({ ...product, count: 0 })); 
+      products.value = response.data.map(product => {
+      // Check if the product is in `kart` and set count from `kart`
+      const kartItem = kart.value.find(item => item.id === product.id);
+      return {
+        ...product,
+        count: kartItem ? kartItem.count : 0 // Set to kart count if exists, otherwise 0
+      };});
       sortProducts();
       console.log(products.value)
     } catch (error) {
@@ -169,13 +176,16 @@
 function addToKart(product) {
   
     const exists = kart.value.find(item => item.id === product.id);
+
+    // const inc = kart.value.filter(item => item.count !== 0);
+
   
     if (!exists) {
       
       kart.value.push(product);
-      console.log('kar',kart)
+      console.log('kar',kart.value)
     }
-//     eventBus.emit('add-kart',{kart});
+    eventBus.emit('sndnav',kart.value);
   }
 
   
@@ -195,13 +205,19 @@ function addToKart(product) {
   }
   
   // Reset count for a specific product
-//   function reset(product) {
-//     product.count = 0;
-//   }
-   function reset(){
-    kart.value=([])
-    eventBus.emit('add-kart',{kart});
-   }
+  function reset(product) {
+    product.count = 0;
+    const kartItem = kart.value.findIndex(item => item.id === product.id);
+    // console.log('asdasdasd',kartItem)
+    kart.value.splice(kartItem,1)
+    console.log('adasdad',kart.value)
+    // kart.value=([])
+      // eventBus.emit('set-kart',kart.value);
+  }
+  //  function reset(){
+  //   kart.value=([])
+  //   eventBus.emit('add-kart',{kart});
+  //  }
  
   // Fetch products when component is mounted
   onMounted(fetchProducts);

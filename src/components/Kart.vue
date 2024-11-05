@@ -87,6 +87,7 @@
     // return givenProducts.value.splice(0,localProducts.value.length);
     localProducts.value.splice(0); 
     show_kart.value=false
+    eventBus.emit('sndnav',localProducts.value)
   }
   
   // function del_item(idx) {
@@ -107,6 +108,7 @@
   function clearAll() {
   localProducts.value.splice(0); 
   console.log('kart', localProducts);
+  eventBus.emit('sndnav',localProducts.value)
 }
   </script>
   <style>

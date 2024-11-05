@@ -15,15 +15,22 @@
 import { eventBus } from '@/eventBus';
 import { ref,computed, inject } from 'vue';
 
-// const kart = ref([]);
+const kart = ref([]);
 
-// eventBus.on('sndnav',(val)=>{
-//      console.log('Bal', val)
-//     kart.value = val
-// }
-// );
+eventBus.on('sndnav',(val)=>{
+     console.log('Bal', val)
+    kart.value = val
+}
+);
 
-const kart = inject('sndkart')
+eventBus.on('set-kart',(val)=>{
+    kart.value = val
+}
+);
+
+// const kart = inject('sndkart')
+
+
 
 const count = computed(() => kart.value.length);
 </script>
